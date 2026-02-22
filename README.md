@@ -90,3 +90,17 @@ read-me-later-bot/
 ## 👨‍💻 Author
 
 Made by Jayshri Girase
+
+
+
+
+---
+
+<!-- ## 📋 Quick Summary
+```
+Start project  → cd C:\Demo\read-me-later-bot
+Activate venv  → venv\Scripts\activate
+Run website    → python app.py
+Run terminal   → python main.py
+Stop program   → Ctrl + C
+Save to GitHub → git add . → git commit → git push -->

@@ -30,8 +30,7 @@ def get_youtube_transcript(url):
 
         # Fetch the transcript (version 0.7.x method)
         ytt_api = YouTubeTranscriptApi()
-        fetched = ytt_api.fetch(video_id)
-        
+        fetched = ytt_api.fetch(video_id, languages=['en', 'hi', 'mr', 'en-US', 'en-GB'])
         # Join all transcript pieces into one block of text
         full_transcript = " ".join([entry.text for entry in fetched])
         
