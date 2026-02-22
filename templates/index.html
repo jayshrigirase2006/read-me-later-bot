@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Read-Me-Later Bot 🤖</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background: #0f0f1a;
+            color: #fff;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        
+        .container {
+            background: #1a1a2e;
+            border-radius: 20px;
+            padding: 40px;
+            width: 100%;
+            max-width: 700px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+        }
+        
+        h1 {
+            text-align: center;
+            font-size: 2rem;
+            margin-bottom: 10px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .subtitle {
+            text-align: center;
+            color: #888;
+            margin-bottom: 30px;
+            font-size: 0.95rem;
+        }
+        
+        .input-group {
+            margin-bottom: 20px;
+        }
+        
+        input[type="text"] {
+            width: 100%;
+            padding: 15px 20px;
+            border-radius: 12px;
+            border: 2px solid #333;
+            background: #0f0f1a;
+            color: #fff;
+            font-size: 1rem;
+            outline: none;
+            transition: border 0.3s;
+        }
+        
+        input[type="text"]:focus {
+            border-color: #667eea;
+        }
+        
+        .checkbox-group {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 20px;
+            color: #aaa;
+        }
+        
+        .checkbox-group input {
+            width: 18px;
+            height: 18px;
+            cursor: pointer;
+        }
+        
+        .btn {
+            width: 100%;
+            padding: 15px;
+            border-radius: 12px;
+            border: none;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(102,126,234,0.4);
+        }
+        
+        .btn-primary:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+        
+        .result {
+            margin-top: 30px;
+            display: none;
+        }
+        
+        .result-box {
+            background: #0f0f1a;
+            border-radius: 12px;
+            padding: 25px;
+            border: 1px solid #333;
+        }
+        
+        .result-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 15px;
+            color: #667eea;
+        }
+        
+        .bullet {
+            padding: 10px 0;
+            border-bottom: 1px solid #222;
+            color: #ddd;
+            line-height: 1.6;
+        }
+        
+        .bullet:last-child {
+            border-bottom: none;
+        }
+        
+        .sentiment-box {
+            margin-top: 20px;
+            padding: 15px;
+            background: #1a1a2e;
+            border-radius: 10px;
+            border-left: 4px solid #667eea;
+        }
+        
+        .sentiment-score {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: #667eea;
+        }
+        
+        .sentiment-reason {
+            color: #aaa;
+            margin-top: 5px;
+            font-size: 0.9rem;
+        }
+        
+        .loading {
+            text-align: center;
+            padding: 30px;
+            color: #667eea;
+            display: none;
+        }
+        
+        .error-box {
+            background: #2d1a1a;
+            border: 1px solid #ff4444;
+            border-radius: 12px;
+            padding: 15px;
+            color: #ff6666;
+            margin-top: 20px;
+            display: none;
+        }
+
+        .success-badge {
+            background: #1a2d1a;
+            border: 1px solid #44ff44;
+            border-radius: 8px;
+            padding: 10px 15px;
+            color: #66ff66;
+            margin-top: 15px;
+            display: none;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🤖 Read-Me-Later Bot</h1>
+        <p class="subtitle">Paste any article or YouTube URL and get an instant AI summary</p>
+        
+        <div class="input-group">
+            <input type="text" id="urlInput" placeholder="Paste your URL here... (article or YouTube)" />
+        </div>
+        
+        <div class="checkbox-group">
+            <input type="checkbox" id="sendEmail" />
+            <label for="sendEmail">Also send summary to my email</label>
+        </div>
+        
+        <button class="btn btn-primary" onclick="summarizeUrl()" id="submitBtn">
+            ✨ Summarize Now
+        </button>
+        
+        <div class="loading" id="loading">
+            <p>🤖 AI is reading and summarizing...</p>
+        </div>
+        
+        <div class="error-box" id="errorBox"></div>
+        
+        <div class="result" id="result">
+            <div class="result-box">
+                <div class="result-title">📋 Summary</div>
+                <div id="bullets"></div>
+                <div class="sentiment-box">
+                    <div class="sentiment-score" id="sentiment"></div>
+                    <div class="sentiment-reason" id="reason"></div>
+                </div>
+            </div>
+            <div class="success-badge" id="emailBadge">
+                ✅ Summary sent to your email!
+            </div>
+        </div>
+    </div>
+
+    <script>
+        async function summarizeUrl() {
+            const url = document.getElementById('urlInput').value.trim();
+            const sendEmail = document.getElementById('sendEmail').checked;
+            const btn = document.getElementById('submitBtn');
+            
+            if (!url) {
+                showError('Please enter a URL first!');
+                return;
+            }
+            
+            // Show loading
+            btn.disabled = true;
+            btn.textContent = '⏳ Processing...';
+            document.getElementById('loading').style.display = 'block';
+            document.getElementById('result').style.display = 'none';
+            document.getElementById('errorBox').style.display = 'none';
+            
+            try {
+                const response = await fetch('/summarize', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ url, send_email: sendEmail })
+                });
+                
+                const data = await response.json();
+                
+                if (data.error) {
+                    showError(data.error);
+                    return;
+                }
+                
+                // Show results
+                const bulletsDiv = document.getElementById('bullets');
+                bulletsDiv.innerHTML = data.bullets
+                    .map(b => `<div class="bullet">${b}</div>`)
+                    .join('');
+                
+                document.getElementById('sentiment').textContent = 
+                    `😊 Sentiment: ${data.sentiment}`;
+                document.getElementById('reason').textContent = data.reason;
+                
+                document.getElementById('result').style.display = 'block';
+                
+                if (sendEmail) {
+                    document.getElementById('emailBadge').style.display = 'block';
+                }
+                
+            } catch (err) {
+                showError('Something went wrong. Please try again.');
+            } finally {
+                btn.disabled = false;
+                btn.textContent = '✨ Summarize Now';
+                document.getElementById('loading').style.display = 'none';
+            }
+        }
+        
+        function showError(msg) {
+            const errorBox = document.getElementById('errorBox');
+            errorBox.textContent = '❌ ' + msg;
+            errorBox.style.display = 'block';
+            document.getElementById('loading').style.display = 'none';
+            document.getElementById('submitBtn').disabled = false;
+            document.getElementById('submitBtn').textContent = '✨ Summarize Now';
+        }
+        
+        // Allow pressing Enter to submit
+        document.getElementById('urlInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') summarizeUrl();
+        });
+    </script>
+</body>
+</html>
