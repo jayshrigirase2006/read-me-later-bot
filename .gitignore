@@ -1,7 +1,22 @@
+# Secret keys — never push these
 .env
+
+# Virtual environment
 venv/
+
+# Snapshots folder
 snapshots/
+
+# Python cache files
 __pycache__/
 *.pyc
 *.pyo
+
+# VS Code settings
+.vscode/
+
+# Mac system files
 .DS_Store
+git
+# Windows system files
+Thumbs.db
